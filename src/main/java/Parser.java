@@ -1,9 +1,13 @@
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * Created by user on 19.03.15.
  */
-public class Parser implements Analyzer<LinkedList<Token>, LinkedList<Token>> {
+public class Parser implements Analyzer<LinkedList<Token>, Map<TokenType, LinkedList<Token>>> {
 
 
     private Analyzer prevHandler;
@@ -30,24 +34,50 @@ public class Parser implements Analyzer<LinkedList<Token>, LinkedList<Token>> {
     }
 
     @Override
-    public LinkedList<Token> analyze(LinkedList<Token> matter) {
-        matter.forEach((token) -> {
-            if (token.getType().equals(TokenType.STATEMENTS)) {
-                resolveFamily(token);
+    public Map<TokenType, LinkedList<Token>> analyze(LinkedList<Token> matter) {
+        Map<TokenType, LinkedList<Token>> tokenFamily = new ConcurrentHashMap<>();
+
+        for (TokenType tokenType : TokenType.values()) {
+            tokenFamily.put(tokenType, new LinkedList<Token>());
+        }
+
+        matter.parallelStream().forEach((token) -> {
+            if (token.getNonTerminaltype().equals(TokenType.STATEMENTS)) {
+                resolveFamily(token, tokenFamily);
+                System.out.println("Parser.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype());
             }
         });
-        return matter;
+        return tokenFamily;
     }
 
-    private void resolveFamily(Token token) {
+    /*Without handling nested expression and removing left recursion*/
+    private void resolveFamily(Token token, Map<TokenType, LinkedList<Token>> tokenFamily) {
 
+        Pattern patternH = Pattern.compile(TokenType.H_FAMILY.getRegex());
+        Pattern patternP = Pattern.compile(TokenType.P_FAMILY.getRegex());
+        Pattern patternLO = Pattern.compile(TokenType.LINK_OPEN_FAMILY.getRegex());
+        Pattern patternLC = Pattern.compile(TokenType.LINK_CLOSE_FAMILY.getRegex());
+        Pattern patternES = Pattern.compile(TokenType.EM_STRONG_FAMILY.getRegex());
 
+        if (patternH.matcher(token.getToken()).matches()) {
+            token.setFamilyType(TokenType.H_FAMILY);
+            tokenFamily.get(TokenType.H_FAMILY).add(token);
+
+        } else if (patternP.matcher(token.getToken()).matches()) {
+            token.setFamilyType(TokenType.P_FAMILY);
+            tokenFamily.get(TokenType.P_FAMILY).add(token);
+
+        } else if (patternLO.matcher(token.getToken()).matches()) {
+            token.setFamilyType(TokenType.LINK_OPEN_FAMILY);
+            tokenFamily.get(TokenType.LINK_OPEN_FAMILY).add(token);
+
+        } else if (patternLC.matcher(token.getToken()).matches()) {
+            token.setFamilyType(TokenType.LINK_CLOSE_FAMILY);
+            tokenFamily.get(TokenType.LINK_CLOSE_FAMILY).add(token);
+
+        } else if (patternES.matcher(token.getToken()).matches()) {
+            token.setFamilyType(TokenType.EM_STRONG_FAMILY);
+            tokenFamily.get(TokenType.EM_STRONG_FAMILY).add(token);
+        }
     }
 }
-
-/*    String s = "test 1-2-22";
-    String[] vars = s.split("[ -]");
-    String name = vars[0];
-    String part_id = vars[1];
-    String brand_id = vars[2];
-    String count  = vars[3];*/

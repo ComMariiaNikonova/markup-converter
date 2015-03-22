@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -41,11 +40,11 @@ public class Lexer implements Analyzer<String, LinkedList<Token>> {
         for (int i = 0; i < arr.length; i++) {
             if (patternText.matcher(String.valueOf(arr[i])).matches()) {
                 tokens.add(new Token(String.valueOf(arr[i]), TokenType.TEXT, i));
-            }
-            if (patternStats.matcher(String.valueOf(arr[i])).matches()) {
+            } else if (patternStats.matcher(String.valueOf(arr[i])).matches()) {
                 tokens.add(new Token(String.valueOf(arr[i]), TokenType.STATEMENTS, i));
             }
         }
+        tokens.forEach((token) -> System.out.println("Lexer.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype()));
         return tokens;
     }
 }
