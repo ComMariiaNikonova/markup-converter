@@ -1,3 +1,7 @@
+package task.markup.core;
+
+import java.util.LinkedList;
+
 /**
  * Created by user on 20.03.15.
  */
@@ -19,7 +23,9 @@ public class Strategy {
         Lexer lexer = new Lexer();
         Parser parser = new Parser(lexer);
         SimpleASTConstructor astConstructor = new SimpleASTConstructor(parser);
+        Converter converter = new Converter();
+        LinkedList<Token> tokens = lexer.handle(data);
 
-        return ""; /*data=astConstructor.handle(parser.handle(lexer.handle(data)));*/
+        return data = Builder.build(converter.convert(astConstructor.handle(parser.handle(lexer.handle(data)))));
     }
 }

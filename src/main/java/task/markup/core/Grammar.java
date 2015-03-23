@@ -1,3 +1,7 @@
+package task.markup.core;
+
+import task.markup.IOHandler;
+
 import java.io.IOException;
 import java.util.Properties;
 
@@ -13,6 +17,7 @@ public class Grammar {
     }
 
     private static Properties grammarTable = new Properties();
+
 
     static {
         try {

@@ -1,4 +1,5 @@
-import java.util.HashMap;
+package task.markup.core;
+
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,7 +45,7 @@ public class Parser implements Analyzer<LinkedList<Token>, Map<TokenType, Linked
         matter.parallelStream().forEach((token) -> {
             if (token.getNonTerminaltype().equals(TokenType.STATEMENTS)) {
                 resolveFamily(token, tokenFamily);
-                System.out.println("Parser.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype());
+                System.out.println("task.markup.core.Parser.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype());
             }
         });
         return tokenFamily;

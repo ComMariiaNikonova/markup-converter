@@ -1,17 +1,19 @@
-import sun.jvm.hotspot.runtime.Bytes;
+package task.markup;
+
+import task.markup.core.Grammar;
+import task.markup.core.Strategy;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Properties;
 import java.util.function.Supplier;
 
 /**
  * Created by user on 19.03.15.
  */
-class IOHandler {
+public class IOHandler {
 
 
     private static final String SOURCE_FILE_PATH_MSG = "\n\nEnter path to source file: ";
@@ -32,7 +34,7 @@ class IOHandler {
 
     private String iSource(Supplier<String> inFileFunc) {
         String sourceData = "";
-        try (RandomAccessFile sourceFile = new RandomAccessFile("/Users/user/1_EduProjects/markup-converter/src/test/resources/inputSource"/*inFileFunc.get()*/, "r")) {//todo
+        try (RandomAccessFile sourceFile = new RandomAccessFile(/*"/Users/user/1_EduProjects/markup-converter/src/test/resources/inputSource"*/inFileFunc.get(), "r")) {//todo
             FileChannel inChannel = sourceFile.getChannel();
 
             ByteBuffer buf = ByteBuffer.allocate(256);
@@ -60,7 +62,7 @@ class IOHandler {
     }
 
     private void oPreparedData(Supplier<String> outFileFunc, String preparedData) {
-        BufferedWriter writer = null;//todo
+        BufferedWriter writer = null;
         try {
             writer = Files.newBufferedWriter(Paths.get("/Users/user/1_EduProjects/markup-converter/src/test/resources/outHtml"/*outFileFunc.get()*/));
             writer.write(preparedData); //TODO

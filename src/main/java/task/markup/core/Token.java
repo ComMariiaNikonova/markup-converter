@@ -1,3 +1,5 @@
+package task.markup.core;
+
 /**
  * Created by user on 22.03.15.
  */
@@ -11,6 +13,8 @@ public class Token {
     private Enum<TokenType> familyType;
     private Enum<TokenType> terminalType;
     private int column;
+    private boolean passed;
+
 
     public Token(String token, Enum<TokenType> type, int column) {
         this.token = token;
@@ -45,4 +49,13 @@ public class Token {
     public void setTerminalType(Enum<TokenType> terminalType) {
         this.terminalType = terminalType;
     }
+
+    public boolean isPassed() {
+        return passed;
+    }
+
+    public void setPassed(boolean passed) {
+        this.passed = passed;
+    }
+
 }

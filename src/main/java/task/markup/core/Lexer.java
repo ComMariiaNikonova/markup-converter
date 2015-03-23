@@ -1,3 +1,5 @@
+package task.markup.core;
+
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
@@ -31,6 +33,9 @@ public class Lexer implements Analyzer<String, LinkedList<Token>> {
 
     @Override
     public LinkedList<Token> analyze(String matter) {
+
+        System.out.println("\n\nLexer: analyze(): matter: " + "\n" + matter + "\n");
+
         LinkedList<Token> tokens = new LinkedList<>();
         char[] arr = new char[matter.toCharArray().length];
 
@@ -44,7 +49,7 @@ public class Lexer implements Analyzer<String, LinkedList<Token>> {
                 tokens.add(new Token(String.valueOf(arr[i]), TokenType.STATEMENTS, i));
             }
         }
-        tokens.forEach((token) -> System.out.println("Lexer.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype()));
+        tokens.forEach((token) -> System.out.println("task.markup.core.Lexer.class: TOKEN: " + token.getToken() + " TYPE: " + token.getNonTerminaltype()));
         return tokens;
     }
 }

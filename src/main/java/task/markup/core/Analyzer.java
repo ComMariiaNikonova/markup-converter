@@ -1,5 +1,4 @@
-import java.io.IOException;
-import java.util.Properties;
+package task.markup.core;
 
 /**
  * Created by user on 19.03.15.
