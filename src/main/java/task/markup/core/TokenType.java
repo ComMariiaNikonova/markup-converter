@@ -40,6 +40,7 @@ public enum TokenType {
     UNCLOSED(HierarchyStruct.COMMON),
     UNDEFINED(HierarchyStruct.COMMON);
 
+
     private LexemFamily family;
     private String regex;
     private HierarchyStruct hierarchyStruct;

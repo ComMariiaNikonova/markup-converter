@@ -1,6 +1,5 @@
 package task.markup.core;
 
-import java.util.Comparator;
 
 /**
  * Created by user on 22.03.15.

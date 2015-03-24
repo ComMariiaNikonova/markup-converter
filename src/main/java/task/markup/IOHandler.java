@@ -67,8 +67,10 @@ public class IOHandler {
     private void oPreparedData(Supplier<String> outFileFunc, String preparedData) {
         BufferedWriter writer = null;
         try {
+
             writer = Files.newBufferedWriter(Paths.get(outFileFunc.get()));
             writer.write(preparedData);
+
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
