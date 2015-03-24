@@ -1,12 +1,11 @@
 package task.markup.core;
 
+import java.util.Comparator;
+
 /**
  * Created by user on 22.03.15.
  */
 public class Token {
-    public void setNonTerminaltype(Enum<TokenType> nonTerminaltype) {
-        this.nonTerminaltype = nonTerminaltype;
-    }
 
     private String token;
     private Enum<TokenType> nonTerminaltype;
@@ -56,6 +55,14 @@ public class Token {
 
     public void setPassed(boolean passed) {
         this.passed = passed;
+    }
+
+    public Enum<TokenType> getFamilyType() {
+        return familyType;
+    }
+
+    public void setNonTerminaltype(Enum<TokenType> nonTerminaltype) {
+        this.nonTerminaltype = nonTerminaltype;
     }
 
 }

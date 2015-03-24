@@ -26,6 +26,6 @@ public class Strategy {
         Converter converter = new Converter();
         LinkedList<Token> tokens = lexer.handle(data);
 
-        return data = Builder.build(converter.convert(astConstructor.handle(parser.handle(lexer.handle(data)))));
+        return data = Builder.build(converter.convert(astConstructor.handle(parser.handle(tokens))), tokens);
     }
 }

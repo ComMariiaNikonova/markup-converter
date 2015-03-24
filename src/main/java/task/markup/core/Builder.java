@@ -7,14 +7,25 @@ import java.util.List;
  */
 public class Builder {
 
-    public static String build(List<Token> tokens) {
-        tokens.sort((o1, o2) ->
-                Integer.compare(o1.getColumn(), o2.getColumn()));
+    public static String build(List<Token> tokensPrepared, List<Token> mixedData) {
+        mixedData.forEach((token) -> {
+            if (token.getNonTerminaltype().equals(TokenType.TEXT)) {
+                tokensPrepared.add(token);
+            }
+        });
 
+        tokensPrepared.sort((o1, o2) -> {
+            System.out.println("BUILDER: TOKEN INDEXES: " + o1.getColumn() + " : " + o2.getColumn());
+            return Integer.compare(o1.getColumn(), o2.getColumn());
+        });
+        //todo: add "html" "body" "/html" "/body" to common grammar;
         StringBuilder builder = new StringBuilder();
-        tokens.forEach((token) ->
+        builder.append("<html>\n" +
+                "<body>");
+        tokensPrepared.forEach((token) ->
                 builder.append(token.getToken()));
-
+        builder.append("</body>\n" +
+                "</html>");
         return builder.toString();
     }
 }
