@@ -12,25 +12,20 @@ public class Converter {
     public List<Token> convert(List<Lexema> lexemaList) {
 
         List<Token> list = new LinkedList<>();
+
         lexemaList.forEach((lexema) -> {
 
             list.add(new Token(replaceByGrammar(lexema.getType()), lexema.getType(), lexema.getOpenPositionIndex()));
 
-            if (lexema.isNeedCloseTag()) {
-                list.add(new Token(replaceByGrammar(lexema.getCloseTagType()), lexema.getCloseTagType(), lexema.getClosePositionIndex()));
-            }
-
-            for (int j = 1; j < (lexema.getSequenceLength()); j++) {
+            for (int j = 2; j < (lexema.getSequenceLength()); j++) {
                 list.add(new Token("", TokenType.UNDEFINED, lexema.getOpenPositionIndex() + j));
-                if (lexema.isNeedCloseTag()) {
-                    list.add(new Token("", TokenType.UNDEFINED, lexema.getClosePositionIndex() + j));
-                }
             }
         });
+        list.sort((o1, o2) -> Integer.compare(o1.getColumn(), o2.getColumn()));
         return list;
     }
 
     private String replaceByGrammar(TokenType type) {
-        return Grammar.getGrammarTable().getProperty(type.name());
+        return InitGrammar.getGrammarTable().getProperty(type.name());
     }
 }

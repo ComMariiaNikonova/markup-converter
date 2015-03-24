@@ -1,6 +1,6 @@
 package task.markup;
 
-import task.markup.core.Grammar;
+import task.markup.core.InitGrammar;
 import task.markup.core.Strategy;
 
 import java.io.*;
@@ -15,6 +15,9 @@ import java.util.function.Supplier;
  */
 public class IOHandler {
 
+    static {
+        System.setProperty("file.encoding", "UTF-8");
+    }
 
     private static final String SOURCE_FILE_PATH_MSG = "\n\nEnter path to source file: ";
     private static final String OUTPUT_FILE_PATH_MSG = "\n\nEnter path to output file (if you don`t want store it, type 'no'): ";
@@ -46,7 +49,7 @@ public class IOHandler {
 
                 byte[] arr = new byte[buf.limit()];
                 buf.get(arr);
-                sourceData = new String(arr, "UTF-8");
+                sourceData = new String(arr);
                 System.out.print(sourceData);
 
                 buf.clear();
@@ -64,7 +67,7 @@ public class IOHandler {
     private void oPreparedData(Supplier<String> outFileFunc, String preparedData) {
         BufferedWriter writer = null;
         try {
-            writer = Files.newBufferedWriter(Paths.get("/Users/user/1_EduProjects/markup-converter/src/test/resources/outHtml"/*outFileFunc.get()*/));
+            writer = Files.newBufferedWriter(Paths.get(/*"/Users/user/1_EduProjects/markup-converter/src/test/resources/outHtml"*/outFileFunc.get()));
             writer.write(preparedData); //TODO
             writer.flush();
         } catch (IOException e) {
@@ -93,8 +96,9 @@ public class IOHandler {
     }
 
     public static void main(String[] args) {
-
-        Grammar.getGrammarTable().entrySet().forEach((str) -> System.out.println(str));
+        System.setProperty("file.encoding", "UTF-8");
+        System.out.println("\nGRAMMAR: \n");
+        InitGrammar.getGrammarTable().entrySet().forEach((str) -> System.out.println(str));
         Strategy strategy = new Strategy(IOHandler.readSource());
         strategy.analyzeByStrategy();
         IOHandler.writeSource(strategy.getData());

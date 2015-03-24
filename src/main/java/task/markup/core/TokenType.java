@@ -7,44 +7,74 @@ package task.markup.core;
 public enum TokenType {
     /*TypeTree:*/
     /*task.markup.core.Lexer*/
-    TEXT("[^(#{1,3}|\\*{1,3}|\\n{1}|\\[{1}|\\]{1})]*"), //done
-    STATEMENTS("[\\*]{1,2}|[#]{1,3}|\\[|\\]|\\n"),
+    TEXT("[^(#{1,3}|\\*{1,3}|\\n{1}|\\[{1}|\\]{1}|\\n{1})]*", HierarchyStruct.NON_TERM), //done
+    STATEMENTS("[\\*]{1,2}|[#]{1,3}|\\[|\\]|\\n{1}", HierarchyStruct.NON_TERM),
 
     /*task.markup.core.Parser and AST*/
-    H_FAMILY("([^#]*[#]{1,3}[^#]*)"),//both side
-    P_FAMILY("\\n{1}"), //both side - should be checked pragmatically
-    LINK_OPEN_FAMILY("\\[{1}"),
-    LINK_CLOSE_FAMILY("\\]{1}"),
-    EM_STRONG_FAMILY("([^\\*]*[\\*]{1,2}[^\\*]*)"),//both side
+    TREE_H("([^#]*[#]{1,3}[^#]*)", LexemFamily.OPENNED, HierarchyStruct.TREE_NON_TERM),//both side
+    TREE_P("\\n{1}", LexemFamily.CLOSED, HierarchyStruct.TREE_NON_TERM), //both side - should be checked pragmatically
+    TREE_LINK_OPEN("\\[{1}", LexemFamily.OPENNED, HierarchyStruct.TREE_NON_TERM),
+    TREE_LINK_CLOSE("\\]{1}", LexemFamily.OPENNED, HierarchyStruct.TREE_NON_TERM),
+    TREE_EM_STRONG("([^\\*]*[\\*]{1,2}[^\\*]*)", LexemFamily.CLOSED, HierarchyStruct.TREE_NON_TERM),//both side
 
     /*Terminals*/
     /*Open tags*/
-    H1(LexemFamily.CLOSED),
-    H2(LexemFamily.CLOSED),
-    H3(LexemFamily.CLOSED),
-    P_(LexemFamily.CLOSED),
-    LINK_OPEN(LexemFamily.OPENNED),
-    LINK_CLOSE(LexemFamily.OPENNED),
-    EM(LexemFamily.CLOSED),
-    STRONG(LexemFamily.CLOSED),
+    H1(LexemFamily.CLOSED, HierarchyStruct.TERM),
+    H2(LexemFamily.CLOSED, HierarchyStruct.TERM),
+    H3(LexemFamily.CLOSED, HierarchyStruct.TERM),
+    P_(LexemFamily.CLOSED, HierarchyStruct.TERM),
+    LINK_OPEN(LexemFamily.OPENNED, HierarchyStruct.TERM),
+    LINK_CLOSE(LexemFamily.OPENNED, HierarchyStruct.TERM),
+    EM(LexemFamily.CLOSED, HierarchyStruct.TERM),
+    STRONG(LexemFamily.CLOSED, HierarchyStruct.TERM),
 
 
     /*Close tags*/
-    H1_CLOSE(),
-    H2_CLOSE(),
-    H3_CLOSE(),
-    EM_CLOSE(),
-    STRONG_CLOSE(),
-    P_CLOSE(),
+    H1_CLOSE(HierarchyStruct.TERM),
+    H2_CLOSE(HierarchyStruct.TERM),
+    H3_CLOSE(HierarchyStruct.TERM),
+    EM_CLOSE(HierarchyStruct.TERM),
+    STRONG_CLOSE(HierarchyStruct.TERM),
+    P_CLOSE(HierarchyStruct.TERM),
 
-    UNCLOSED(),
-    UNDEFINED();
+    UNCLOSED(HierarchyStruct.COMMON),
+    UNDEFINED(HierarchyStruct.COMMON);
+
+    private LexemFamily family;
+    private String regex;
+    private HierarchyStruct hierarchyStruct;
+
+    public enum LexemFamily {
+        CLOSED,
+        OPENNED;
+    }
+
+    public enum HierarchyStruct {
+        NON_TERM,
+        TREE_NON_TERM,
+        TERM,
+        COMMON;
+    }
+
+    TokenType() {
+    }
 
     TokenType(String regex) {
         this.regex = regex;
     }
 
-    TokenType() {
+    TokenType(HierarchyStruct hierarchyStruct) {
+        this.hierarchyStruct = hierarchyStruct;
+    }
+
+    TokenType(String regex, HierarchyStruct hierarchyStruct) {
+        this.regex = regex;
+        this.hierarchyStruct = hierarchyStruct;
+    }
+
+    TokenType(LexemFamily family, HierarchyStruct hierarchyStruct) {
+        this.family = family;
+        this.hierarchyStruct = hierarchyStruct;
     }
 
     TokenType(LexemFamily family, String regex) {
@@ -56,7 +86,11 @@ public enum TokenType {
         this.family = family;
     }
 
-    private String regex;
+    TokenType(String regex, LexemFamily family, HierarchyStruct hierarchyStruct) {
+        this.regex = regex;
+        this.family = family;
+        this.hierarchyStruct = hierarchyStruct;
+    }
 
     public LexemFamily getFamily() {
         return family;
@@ -66,10 +100,7 @@ public enum TokenType {
         return regex;
     }
 
-    private LexemFamily family;
-
-    public enum LexemFamily {
-        CLOSED,
-        OPENNED;
+    public HierarchyStruct getHierarchyStruct() {
+        return hierarchyStruct;
     }
 }
