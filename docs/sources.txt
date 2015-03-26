@@ -1,0 +1,4 @@
+Books:
+The Essence of Compilers (The Essence of Computing Series) by Robin Hunter
+==========
+Practical matter of Compiler Course - by request.
